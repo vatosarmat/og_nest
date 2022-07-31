@@ -3,6 +3,18 @@ import { EntityManager } from '@mikro-orm/core'
 import { CreateProjectDto } from './dto'
 import { Project } from '../entities'
 
+const projectFields = [
+  'id',
+  // 'createdAt',
+  // 'updatedAt',
+  'title',
+  'todos.id',
+  // 'todos.createdAt',
+  // 'todos.updatedAt',
+  'todos.text',
+  'todos.isCompleted',
+] as const
+
 @Injectable()
 export class ProjectsService {
   constructor(private readonly em: EntityManager) {}
@@ -14,11 +26,11 @@ export class ProjectsService {
   }
 
   findAll() {
-    return this.em.find(Project, {})
+    return this.em.find(Project, {}, { fields: projectFields })
   }
 
   findOne(id: number) {
-    return this.em.findOneOrFail(Project, id)
+    return this.em.findOneOrFail(Project, id, { fields: projectFields })
   }
 
   // update(id: number, updateProjectDto: UpdateProjectDto) {

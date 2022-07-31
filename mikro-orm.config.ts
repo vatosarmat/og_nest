@@ -3,7 +3,7 @@ import type { PostgreSqlDriver } from '@mikro-orm/postgresql'
 import { TSMigrationGenerator } from '@mikro-orm/migrations'
 
 const options: Options<PostgreSqlDriver> = {
-  entities: ['./dist/entities'],
+  entities: ['./dist/src/entities'],
   entitiesTs: ['./src/entities'],
   dbName: 'og_nest',
   user: 'og_nest',

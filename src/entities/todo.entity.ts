@@ -1,10 +1,4 @@
-import {
-  Entity,
-  IdentifiedReference,
-  ManyToOne,
-  Property,
-  Reference,
-} from '@mikro-orm/core'
+import { Entity, IdentifiedReference, ManyToOne, Property } from '@mikro-orm/core'
 import { CreateTodoDto } from '../projects/dto'
 import { BaseEntity } from './base.entity'
 import { Project } from './project.entity'
@@ -14,7 +8,7 @@ export class Todo extends BaseEntity {
   constructor(dto: CreateTodoDto) {
     super()
     this.text = dto.text
-    this.project = Reference.createFromPK(Project, dto.project)
+    // this.project = Reference.createFromPK(Project, dto.project)
     if (dto.isCompleted !== undefined) {
       this.isCompleted = dto.isCompleted
     }

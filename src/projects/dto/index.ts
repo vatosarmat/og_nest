@@ -5,7 +5,7 @@ export class CreateProjectDto {
 }
 
 export class CreateTodoDto {
-  project: number
+  project?: number
   text: string
   isCompleted?: boolean
 }
