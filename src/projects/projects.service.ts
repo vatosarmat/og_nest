@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common'
-import { EntityManager } from '@mikro-orm/core'
+import { EntityRepository } from '@mikro-orm/core'
 import { CreateProjectDto } from './dto'
 import { Project } from '../entities'
+import { InjectRepository } from '@mikro-orm/nestjs'
 
-const projectFields = [
+const fields = [
   'id',
   // 'createdAt',
   // 'updatedAt',
@@ -17,20 +18,23 @@ const projectFields = [
 
 @Injectable()
 export class ProjectsService {
-  constructor(private readonly em: EntityManager) {}
+  constructor(
+    @InjectRepository(Project)
+    private readonly projectRepository: EntityRepository<Project>
+  ) {}
 
-  create(createProjectDto: CreateProjectDto) {
-    const project = new Project(createProjectDto)
-    this.em.persistAndFlush(project)
+  async create(createProjectDto: CreateProjectDto) {
+    const project = this.projectRepository.create(createProjectDto)
+    await this.projectRepository.persistAndFlush(project)
     return project
   }
 
   findAll() {
-    return this.em.find(Project, {}, { fields: projectFields })
+    return this.projectRepository.find({}, { fields })
   }
 
   findOne(id: number) {
-    return this.em.findOneOrFail(Project, id, { fields: projectFields })
+    return this.projectRepository.findOneOrFail(id, { fields })
   }
 
   // update(id: number, updateProjectDto: UpdateProjectDto) {

@@ -3,7 +3,11 @@ import * as yaml from 'yaml'
 import type { EntityManager } from '@mikro-orm/core'
 import { Seeder } from '@mikro-orm/seeder'
 
-import { Project, ProjectFields, Todo } from '../../src/entities'
+import { Project, Todo } from '../../src/entities'
+
+type ProjectFields = Omit<Project, 'todos'> & {
+  todos: { isCompleted: boolean; text: string }[]
+}
 
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {

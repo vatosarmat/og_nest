@@ -1,13 +1,16 @@
 import { Collection, OneToMany, Property, Entity } from '@mikro-orm/core'
-import { CreateProjectDto } from '../projects/dto'
 import { BaseEntity } from './base.entity'
-import { Todo, TodoFields } from './todo.entity'
+import { Todo } from './todo.entity'
+
+type InitialFields = {
+  title: string
+}
 
 @Entity()
 export class Project extends BaseEntity {
-  constructor(dto: CreateProjectDto) {
+  constructor({ title }: InitialFields) {
     super()
-    this.title = dto.title
+    this.title = title
   }
 
   @Property()
@@ -15,8 +18,4 @@ export class Project extends BaseEntity {
 
   @OneToMany(() => Todo, todo => todo.project)
   todos = new Collection<Todo>(this)
-}
-
-export type ProjectFields = Omit<Project, 'todos'> & {
-  todos: TodoFields[]
 }

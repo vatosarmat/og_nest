@@ -1,16 +1,29 @@
-import { Entity, IdentifiedReference, ManyToOne, Property } from '@mikro-orm/core'
-import { CreateTodoDto } from '../projects/dto'
+import {
+  Entity,
+  IdentifiedReference,
+  Reference,
+  ManyToOne,
+  Property,
+} from '@mikro-orm/core'
 import { BaseEntity } from './base.entity'
 import { Project } from './project.entity'
 
+type InitialFields = {
+  text: string
+  isCompleted?: boolean
+  project?: number
+}
+
 @Entity()
 export class Todo extends BaseEntity {
-  constructor(dto: CreateTodoDto) {
+  constructor({ text, isCompleted, project }: InitialFields) {
     super()
-    this.text = dto.text
-    // this.project = Reference.createFromPK(Project, dto.project)
-    if (dto.isCompleted !== undefined) {
-      this.isCompleted = dto.isCompleted
+    this.text = text
+    if (isCompleted !== undefined) {
+      this.isCompleted = isCompleted
+    }
+    if (project !== undefined) {
+      this.project = Reference.createFromPK(Project, project)
     }
   }
 
@@ -21,9 +34,5 @@ export class Todo extends BaseEntity {
   isCompleted!: boolean
 
   @ManyToOne(() => Project, { wrappedReference: true })
-  project!: IdentifiedReference<Project>
-}
-
-export type TodoFields = Omit<Todo, 'project'> & {
-  project: number
+  project!: IdentifiedReference<Project, 'id'>
 }
